@@ -1,278 +1,255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Space Shooter Game</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #1a1a1a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-    }
-    
-    .game-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-    
-    h1 {
-      color: #0ff;
-      text-shadow: 0 0 10px #0ff;
-      margin: 0;
-    }
-    
-    canvas {
-      border: 2px solid #0ff;
-      background-color: #000;
-      display: block;
-      box-shadow: 0 0 20px #0ff;
-    }
-    
-    #info {
-      color: #0ff;
-      font-size: 18px;
-      text-align: center;
-      width: 400px;
-    }
-    
-    #score {
-      color: #0f0;
-      font-weight: bold;
-    }
-    
-    #gameOver {
-      color: #f00;
-      font-size: 24px;
-      font-weight: bold;
-      display: none;
-    }
-    
-    .controls {
-      color: #0ff;
-      text-align: center;
-      font-size: 14px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Workshop Learning Page</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --header-bg: #24292e;
+            --header-text: white;
+            --section-bg: white;
+            --highlight-bg: #fff3cd;
+            --code-bg: #f6f8fa;
+            --link-color: #0366d6;
+            --hover-color: #28a745;
+        }
+        
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --header-bg: #1e1e1e;
+            --header-text: #e0e0e0;
+            --section-bg: #1e1e1e;
+            --highlight-bg: #2d2d2d;
+            --code-bg: #2d2d2d;
+            --link-color: #58a6ff;
+            --hover-color: #238636;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        header {
+            background-color: var(--header-bg);
+            color: var(--header-text);
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: 1px solid var(--header-text);
+            color: var(--header-text);
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        h1, h2 {
+            color: var(--link-color);
+        }
+        
+        section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--section-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .highlight {
+            background-color: var(--highlight-bg);
+            padding: 10px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        code {
+            background-color: var(--code-bg);
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            transition: background-color 0.3s ease;
+        }
+        
+        code:hover {
+            background-color: var(--highlight-bg);
+        }
+        
+        a, .interactive-btn {
+            color: var(--link-color);
+            text-decoration: none;
+            padding: 8px 12px;
+            border: 1px solid var(--link-color);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 5px;
+            cursor: pointer;
+        }
+        
+        a:hover, .interactive-btn:hover {
+            background-color: var(--link-color);
+            color: white;
+        }
+        
+        .step-btn {
+            background-color: var(--hover-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .step-btn:hover {
+            background-color: var(--link-color);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: var(--header-bg);
+            color: var(--header-text);
+        }
+    </style>
 </head>
 <body>
-  <div class="game-container">
-    <h1>🚀 Space Shooter</h1>
-    <canvas id="gameCanvas" width="400" height="600"></canvas>
-    <div id="info">
-      <div id="score">Score: 0</div>
-      <div id="gameOver"></div>
-    </div>
-    <div class="controls">
-      <p>← Arrow Keys → to Move | Space to Shoot</p>
-      <p>Press R to Restart</p>
-    </div>
-  </div>
+    <header>
+        <h1>GitHub Workshop: Getting Started with Version Control</h1>
+        <p>Welcome to this interactive learning page for GitHub basics!</p>
+        <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+    </header>
 
-  <script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    
-    // Game variables
-    let gameRunning = true;
-    let score = 0;
-    
-    // Player
-    const player = {
-      x: canvas.width / 2 - 15,
-      y: canvas.height - 40,
-      width: 30,
-      height: 30,
-      speed: 5,
-      dx: 0
-    };
-    
-    // Bullets
-    let bullets = [];
-    const bulletSpeed = 7;
-    
-    // Enemies
-    let enemies = [];
-    let enemySpawnRate = 0;
-    
-    // Keyboard
-    const keys = {};
-    
-    // Event listeners
-    window.addEventListener('keydown', (e) => {
-      keys[e.key] = true;
-      if (e.key === ' ') {
-        e.preventDefault();
-        shoot();
-      }
-      if (e.key === 'r' || e.key === 'R') {
-        if (!gameRunning) restart();
-      }
-    });
-    
-    window.addEventListener('keyup', (e) => {
-      keys[e.key] = false;
-    });
-    
-    function shoot() {
-      if (gameRunning) {
-        bullets.push({
-          x: player.x + player.width / 2 - 2,
-          y: player.y,
-          width: 4,
-          height: 10
-        });
-      }
-    }
-    
-    function spawnEnemy() {
-      const size = 30;
-      enemies.push({
-        x: Math.random() * (canvas.width - size),
-        y: -size,
-        width: size,
-        height: size,
-        speed: 2
-      });
-    }
-    
-    function updatePlayer() {
-      if (keys['ArrowLeft'] || keys['a']) {
-        player.x -= player.speed;
-      }
-      if (keys['ArrowRight'] || keys['d']) {
-        player.x += player.speed;
-      }
-      
-      // Boundary check
-      if (player.x < 0) player.x = 0;
-      if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
-    }
-    
-    function updateBullets() {
-      for (let i = bullets.length - 1; i >= 0; i--) {
-        bullets[i].y -= bulletSpeed;
+    <section id="introduction">
+        <h2>What is GitHub?</h2>
+        <p>GitHub is a web-based platform that uses Git for version control. It allows developers to collaborate on projects, track changes, and manage code repositories.</p>
+        <div class="highlight">
+            <strong>Key Concepts:</strong>
+            <ul>
+                <li><strong>Repository (Repo):</strong> A folder that contains your project files and their revision history.</li>
+                <li><strong>Commit:</strong> A snapshot of your changes at a specific point in time.</li>
+                <li><strong>Branch:</strong> A parallel version of your repository for developing features independently.</li>
+                <li><strong>Pull Request (PR):</strong> A way to propose changes to a repository.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="getting-started">
+        <h2>Getting Started</h2>
+        <button class="step-btn" onclick="toggleStep('step1')">1. Create a GitHub Account</button>
+        <div id="step1" class="hidden">
+            <p>Visit <a href="https://github.com" target="_blank">github.com</a> and sign up for a free account.</p>
+        </div>
         
-        if (bullets[i].y < 0) {
-          bullets.splice(i, 1);
-        }
-      }
-    }
-    
-    function updateEnemies() {
-      enemySpawnRate++;
-      if (enemySpawnRate > 60) {
-        spawnEnemy();
-        enemySpawnRate = 0;
-      }
-      
-      for (let i = enemies.length - 1; i >= 0; i--) {
-        enemies[i].y += enemies[i].speed;
+        <button class="step-btn" onclick="toggleStep('step2')">2. Install Git</button>
+        <div id="step2" class="hidden">
+            <p>Download and install Git from <a href="https://git-scm.com" target="_blank">git-scm.com</a>.</p>
+        </div>
         
-        if (enemies[i].y > canvas.height) {
-          enemies.splice(i, 1);
-          continue;
+        <button class="step-btn" onclick="toggleStep('step3')">3. Configure Git</button>
+        <div id="step3" class="hidden">
+            <p>Open your terminal and run:</p>
+            <code>git config --global user.name "Your Name"</code><br>
+            <code>git config --global user.email "your.email@example.com"</code>
+        </div>
+    </section>
+
+    <section id="basic-workflow">
+        <h2>Basic GitHub Workflow</h2>
+        <ol>
+            <li><strong>Create a Repository:</strong> Click "New repository" on GitHub and give it a name.</li>
+            <li><strong>Clone the Repository:</strong> <code>git clone https://github.com/yourusername/yourrepo.git</code></li>
+            <li><strong>Make Changes:</strong> Edit files in your local repository.</li>
+            <li><strong>Stage Changes:</strong> <code>git add .</code> or <code>git add filename</code></li>
+            <li><strong>Commit Changes:</strong> <code>git commit -m "Your commit message"</code></li>
+            <li><strong>Push Changes:</strong> <code>git push origin main</code></li>
+        </ol>
+    </section>
+
+    <section id="collaboration">
+        <h2>Collaboration Features</h2>
+        <h3>Forking and Pull Requests</h3>
+        <p>To contribute to someone else's project:</p>
+        <ul>
+            <li>Fork the repository</li>
+            <li>Clone your fork</li>
+            <li>Create a new branch for your changes</li>
+            <li>Make your changes and commit them</li>
+            <li>Push to your fork</li>
+            <li>Create a Pull Request</li>
+        </ul>
+
+        <h3>Issues</h3>
+        <p>Use Issues to track bugs, features, and discussions.</p>
+    </section>
+
+    <section id="best-practices">
+        <h2>Best Practices</h2>
+        <ul>
+            <li>Write clear commit messages</li>
+            <li>Use branches for new features</li>
+            <li>Keep your repository organized</li>
+            <li>Review code before merging</li>
+            <li>Use .gitignore to exclude unnecessary files</li>
+        </ul>
+    </section>
+
+    <section id="resources">
+        <h2>Additional Resources</h2>
+        <ul>
+            <li><a href="https://docs.github.com" target="_blank" class="interactive-btn">GitHub Documentation</a></li>
+            <li><a href="https://git-scm.com/doc" target="_blank" class="interactive-btn">Git Documentation</a></li>
+            <li><a href="https://lab.github.com" target="_blank" class="interactive-btn">GitHub Learning Lab</a></li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>Happy coding! 🚀</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
         }
         
-        // Check collision with player
-        if (checkCollision(player, enemies[i])) {
-          gameRunning = false;
-          document.getElementById('gameOver').textContent = `Game Over! Final Score: ${score}`;
-          document.getElementById('gameOver').style.display = 'block';
+        function toggleStep(stepId) {
+            const step = document.getElementById(stepId);
+            step.classList.toggle('hidden');
         }
-      }
-    }
-    
-    function checkCollision(rect1, rect2) {
-      return rect1.x < rect2.x + rect2.width &&
-             rect1.x + rect1.width > rect2.x &&
-             rect1.y < rect2.y + rect2.height &&
-             rect1.y + rect1.height > rect2.y;
-    }
-    
-    function checkBulletEnemyCollision() {
-      for (let i = bullets.length - 1; i >= 0; i--) {
-        for (let j = enemies.length - 1; j >= 0; j--) {
-          if (checkCollision(bullets[i], enemies[j])) {
-            bullets.splice(i, 1);
-            enemies.splice(j, 1);
-            score += 10;
-            document.getElementById('score').textContent = `Score: ${score}`;
-            break;
-          }
-        }
-      }
-    }
-    
-    function draw() {
-      // Clear canvas
-      ctx.fillStyle = '#000';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw stars background
-      ctx.fillStyle = '#fff';
-      for (let i = 0; i < 20; i++) {
-        const x = (i * 37) % canvas.width;
-        const y = (i * 71) % canvas.height;
-        ctx.fillRect(x, y, 1, 1);
-      }
-      
-      // Draw player
-      ctx.fillStyle = '#0f0';
-      ctx.beginPath();
-      ctx.moveTo(player.x + player.width / 2, player.y);
-      ctx.lineTo(player.x, player.y + player.height);
-      ctx.lineTo(player.x + player.width, player.y + player.height);
-      ctx.closePath();
-      ctx.fill();
-      
-      // Draw bullets
-      ctx.fillStyle = '#0ff';
-      bullets.forEach((bullet) => {
-        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-      });
-      
-      // Draw enemies
-      ctx.fillStyle = '#f00';
-      enemies.forEach((enemy) => {
-        ctx.beginPath();
-        ctx.arc(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2, enemy.width / 2, 0, Math.PI * 2);
-        ctx.fill();
-      });
-    }
-    
-    function gameLoop() {
-      if (gameRunning) {
-        updatePlayer();
-        updateBullets();
-        updateEnemies();
-        checkBulletEnemyCollision();
-      }
-      
-      draw();
-      requestAnimationFrame(gameLoop);
-    }
-    
-    function restart() {
-      gameRunning = true;
-      score = 0;
-      player.x = canvas.width / 2 - 15;
-      bullets = [];
-      enemies = [];
-      enemySpawnRate = 0;
-      document.getElementById('score').textContent = `Score: ${score}`;
-      document.getElementById('gameOver').textContent = '';
-      document.getElementById('gameOver').style.display = 'none';
-    }
-    
-    gameLoop();
-  </script>
+    </script>
 </body>
 </html>
